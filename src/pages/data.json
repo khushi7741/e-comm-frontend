@@ -1,0 +1,13 @@
+{
+  "user": [
+    { "userName": "khushi", "password": "khushi123", "role": "user" },
+    { "userName": "priya", "password": "priya123", "role": "user" },
+    { "userName": "yasti", "password": "yasti123", "role": "user" },
+    { "userName": "bansi", "password": "bansi123", "role": "user" },
+    { "userName": "raj", "password": "raj123", "role": "user" },
+    { "userName": "jensi", "password": "jensi123", "role": "store" },
+    { "userName": "jiya", "password": "jiya123", "role": "store" },
+    { "userName": "rensi", "password": "rensi123", "role": "store" },
+    { "userName": "dhruvi", "password": "dhruvi123", "role": "admin" }
+  ]
+}
