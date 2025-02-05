@@ -13,7 +13,7 @@ const StoreAddProduct = () => {
   const [isLoading, setIsLoading] = useState(false);
   async function getData() {
     const response = await fetch(
-      `https://677614da12a55a9a7d0a8150.mockapi.io/api/product/${query}`
+      `http://localhost:5000/store-selected-product/${query}`
     );
     let data = await response.json();
     query && setIsLoading(true);
@@ -35,16 +35,13 @@ const StoreAddProduct = () => {
       product_final_price: values.product_final_price,
       role: role_data.role,
     };
-    const response = await fetch(
-      "http://localhost:5000/store-add-product",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    );
+    const response = await fetch("http://localhost:5000/store-add-product", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
     let result = await response.json();
     console.log(result);
   };
@@ -57,7 +54,7 @@ const StoreAddProduct = () => {
       product_final_price: values.product_final_price,
     };
     const response = await fetch(
-      `https://677614da12a55a9a7d0a8150.mockapi.io/api/product/${query}`,
+      `http://localhost:5000/store-update-product/${query}`,
       {
         method: "PUT",
         headers: {
@@ -65,12 +62,12 @@ const StoreAddProduct = () => {
         },
         body: JSON.stringify(data),
       }
-    )
-      .then((response) => {
-        console.log(response);
-        return response.json();
-      })
-      .then((response) => {});
+    );
+    let result = await response.json();
+    if (result) {
+      console.log(result);
+      navigate("/store/list-product");
+    }
   }
   const {
     values,
@@ -104,8 +101,7 @@ const StoreAddProduct = () => {
     }),
     onSubmit: (_, action) => {
       action.resetForm();
-      product_data();
-      // !query ? product_data() : Updated_product_data();
+      !query ? product_data() : Updated_product_data();
       setIsLoading(false);
     },
   });

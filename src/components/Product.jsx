@@ -88,7 +88,7 @@ const Product = (props) => {
               </button>
             </div>
           </div>
-          <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-center items-center gap-8 w-full">
+          <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-center items-center gap-8 w-full px-10">
             {productDetail?.map((v, i) => (
               <div
                 key={i}

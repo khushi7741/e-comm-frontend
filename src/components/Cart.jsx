@@ -26,7 +26,7 @@ const Cart = (props) => {
   }, [productDetail]);
 
   return (
-    <div className="font-bold text-xl w-full h-[calc(100%-96px)] py-20">
+    <div className="font-bold text-xl w-full h-[calc(100%-96px)] py-20 px-10">
       <div
         className="grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 justify-center items-center gap-8 w-full xl:container mx-auto xl:px-0 px-5"
         onWheel={handleChange}

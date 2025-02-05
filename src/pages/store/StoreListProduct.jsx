@@ -24,21 +24,18 @@ const StoreListProduct = () => {
   }, [productData]);
   async function handleDeleteProduct(id) {
     const response = await fetch(
-      `https://677614da12a55a9a7d0a8150.mockapi.io/api/product/${id}`,
+      `http://localhost:5000/admin-delete-product/${id}`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
       }
-    )
-      .then((response) => {
-        console.log(response);
-        return response.json();
-      })
-      .then((p1) => {
-        product_detail();
-      });
+    );
+    let result = await response.json();
+    if (result) {
+      product_detail();
+    }
   }
   return (
     <div className="p-8 h-[calc(100vh-64px)] overflow-y-auto bg-gray-100">

@@ -43,25 +43,24 @@ const AddProduct = () => {
     }),
     onSubmit: (_, action) => {
       action.resetForm();
-      product_data();
-      // !query ? product_data() : Updated_product_data();
+      !query ? product_data() : Updated_product_data();
       setIsLoading(false);
     },
   });
-  // async function getData() {
-  //   const response = await fetch(
-  //     `https://677614da12a55a9a7d0a8150.mockapi.io/api/product/${query}`
-  //   );
-  //   let data = await response.json();
-  //   query && setIsLoading(true);
-  //   setValues({
-  //     category_name: data.category_name,
-  //     product_image: data.product_image,
-  //     product_name: data.product_name,
-  //     product_price: data.product_price,
-  //     product_final_price: data.product_final_price,
-  //   });
-  // }
+  async function getData() {
+    const response = await fetch(
+      `http://localhost:5000/admin-selected-product/${query}`
+    );
+    let data = await response.json();
+    query && setIsLoading(true);
+    setValues({
+      category_name: data.category_name,
+      product_image: data.product_image,
+      product_name: data.product_name,
+      product_price: data.product_price,
+      product_final_price: data.product_final_price,
+    });
+  }
   const role_data = JSON.parse(localStorage.getItem("admin"));
   const product_data = async () => {
     const data = {
@@ -91,7 +90,7 @@ const AddProduct = () => {
       product_final_price: values.product_final_price,
     };
     const response = await fetch(
-      `https://677614da12a55a9a7d0a8150.mockapi.io/api/product/${query}`,
+      `http://localhost:5000/admin-update-product/${query}`,
       {
         method: "PUT",
         headers: {
@@ -99,11 +98,12 @@ const AddProduct = () => {
         },
         body: JSON.stringify(data),
       }
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {});
+    );
+    let result = await response.json();
+    if (result) {
+      console.log(result);
+      navigate("/admin/list-product");
+    }
   }
 
   const handleFileUpload = async (e) => {
@@ -142,14 +142,14 @@ const AddProduct = () => {
   }, []);
 
   let ignore = false;
-  // useEffect(() => {
-  //   if (!ignore) {
-  //     getData();
-  //   }
-  //   return () => {
-  //     ignore = true;
-  //   };
-  // }, []);
+  useEffect(() => {
+    if (!ignore) {
+      getData();
+    }
+    return () => {
+      ignore = true;
+    };
+  }, []);
   return (
     <div className="p-8 h-[calc(100vh-64px)] bg-gray-100 overflow-y-auto">
       <div className="flex flex-col gap-7">
