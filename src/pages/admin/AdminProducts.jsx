@@ -51,11 +51,11 @@ const AdminProducts = () => {
           </button>
         </div>
         <div className="bg-white rounded-lg shadow-lg p-10">
-          <div className="border border-gray-400 rounded-lg mb-14">
+          <div className="border border-gray-400 rounded-lg">
             <div className="overflow-x-auto scrollbar-x-custom rounded-lg">
               <table className="w-full">
                 <thead>
-                  <tr className="bg-gray-200 text-black/70 text-lg text-nowrap *:py-3 *:px-2 rounded-lg">
+                  <tr className="bg-gray-200 text-black/70 text-lg text-nowrap *:py-3 *:px-2 rounded-lg capitalize">
                     <th>id</th>
                     <th>product image</th>
                     <th>product name</th>

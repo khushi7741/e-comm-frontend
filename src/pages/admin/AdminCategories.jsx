@@ -55,7 +55,7 @@ const AdminCategories = () => {
                   <tr className="bg-gray-200 text-black/70 text-lg text-nowrap *:py-3 *:px-2 rounded-lg">
                     <th className="w-24">id</th>
                     <th className="text-left">category name</th>
-                    <th className="w-80">active</th>
+                    <th className="w-80">action</th>
                   </tr>
                 </thead>
 
