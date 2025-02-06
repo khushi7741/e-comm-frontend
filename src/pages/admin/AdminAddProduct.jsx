@@ -11,42 +11,35 @@ const AdminAddProduct = () => {
   const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const {
-    values,
-    setFieldValue,
-    setValues,
-    errors,
-    touched,
-    handleChange,
-    handleSubmit,
-  } = useFormik({
-    initialValues: {
-      category_name: "",
-      product_image: "",
-      product_name: "",
-      product_price: "",
-      product_final_price: "",
-    },
-    validationSchema: yup.object({
-      category_name: yup.string().required("please select the category"),
-      product_image: yup.string().required("please upload your image"),
-      product_name: yup
-        .string()
-        .min(2)
-        .max(25)
-        .matches(/^[a-zA-Z-]+$/, "Must be only string")
-        .required("please enter product name"),
-      product_price: yup.string().required("please enter product price"),
-      product_final_price: yup
-        .string()
-        .required("please enter final product price"),
-    }),
-    onSubmit: (_, action) => {
-      action.resetForm();
-      product_data();
-      setIsLoading(false);
-    },
-  });
+  const { values, setFieldValue, errors, touched, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        category_name: "",
+        product_image: "",
+        product_name: "",
+        product_price: "",
+        product_final_price: "",
+      },
+      validationSchema: yup.object({
+        category_name: yup.string().required("please select the category"),
+        product_image: yup.string().required("please upload your image"),
+        product_name: yup
+          .string()
+          .min(2)
+          .max(25)
+          .matches(/^[a-zA-Z-]+$/, "Must be only string")
+          .required("please enter product name"),
+        product_price: yup.string().required("please enter product price"),
+        product_final_price: yup
+          .string()
+          .required("please enter final product price"),
+      }),
+      onSubmit: (_, action) => {
+        action.resetForm();
+        product_data();
+        setIsLoading(false);
+      },
+    });
   const role_data = JSON.parse(localStorage.getItem("admin"));
   const product_data = async () => {
     const data = {
@@ -86,13 +79,14 @@ const AdminAddProduct = () => {
     setFieldValue("product_image", cloudData.url);
   };
 
-  async function category_list() {
+  const category_list = async () => {
     const response = await fetch(
       "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
     );
     let data = await response.json();
     setCategoryList(data);
-  }
+  };
+  let ignore = false;
   useEffect(() => {
     if (!ignore) {
       category_list();
@@ -102,7 +96,6 @@ const AdminAddProduct = () => {
     };
   }, []);
 
-  let ignore = false;
   return (
     <div className="p-8 h-[calc(100vh-64px)] bg-gray-100 overflow-y-auto">
       <div className="flex flex-col gap-7">

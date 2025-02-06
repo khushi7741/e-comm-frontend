@@ -5,13 +5,11 @@ import { useNavigate } from "react-router-dom";
 const AdminCategories = () => {
   const [categoryList, setCategoryList] = useState();
   const navigate = useNavigate();
-  async function category_list() {
-    const response = await fetch(
-      "http://localhost:5000/categories"
-    );
+  const category_list = async () => {
+    const response = await fetch("http://localhost:5000/categories");
     let data = await response.json();
     setCategoryList(data);
-  }
+  };
   let ignore = false;
   useEffect(() => {
     if (!ignore) {
@@ -21,7 +19,7 @@ const AdminCategories = () => {
       ignore = true;
     };
   }, []);
-  async function handleDeleteCategory(id) {
+  const handleDeleteCategory = async (id) => {
     const response = await fetch(
       `http://localhost:5000/admin-delete-category/${id}`,
       {
@@ -30,12 +28,12 @@ const AdminCategories = () => {
           "Content-Type": "application/json",
         },
       }
-    )
+    );
     let result = await response.json();
     if (result) {
-     category_list();
+      category_list();
     }
-  }
+  };
   return (
     <div className="p-8 h-[calc(100vh-64px)] overflow-y-auto bg-gray-100 capitalize">
       <div className="flex flex-col gap-5">

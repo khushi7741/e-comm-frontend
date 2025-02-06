@@ -22,7 +22,7 @@ const StoreProducts = () => {
   useEffect(() => {
     console.log(productData);
   }, [productData]);
-  async function handleDeleteProduct(id) {
+  const handleDeleteProduct = async (id) => {
     const response = await fetch(
       `http://localhost:5000/admin-delete-product/${id}`,
       {
@@ -36,7 +36,7 @@ const StoreProducts = () => {
     if (result) {
       product_detail();
     }
-  }
+  };
   return (
     <div className="p-8 h-[calc(100vh-64px)] overflow-y-auto bg-gray-100">
       <div className="flex flex-col gap-7">

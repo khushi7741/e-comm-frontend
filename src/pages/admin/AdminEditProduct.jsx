@@ -3,135 +3,133 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
-
 const AdminEditProduct = () => {
-    const inputRef = useRef(null);
-      const location = useLocation();
-      const searchParams = new URLSearchParams(location.search);
-      const query = searchParams.get("id");
-      const navigate = useNavigate();
-      const [categoryList, setCategoryList] = useState();
-      const [isLoading, setIsLoading] = useState(false);
-      const {
-        values,
-        setFieldValue,
-        setValues,
-        errors,
-        touched,
-        handleChange,
-        handleSubmit,
-      } = useFormik({
-        initialValues: {
-          category_name: "",
-          product_image: "",
-          product_name: "",
-          product_price: "",
-          product_final_price: "",
+  const inputRef = useRef(null);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const query = searchParams.get("id");
+  const navigate = useNavigate();
+  const [categoryList, setCategoryList] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    values,
+    setFieldValue,
+    setValues,
+    errors,
+    touched,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      category_name: "",
+      product_image: "",
+      product_name: "",
+      product_price: "",
+      product_final_price: "",
+    },
+    validationSchema: yup.object({
+      category_name: yup.string().required("please select the category"),
+      product_image: yup.string().required("please upload your image"),
+      product_name: yup
+        .string()
+        .min(2)
+        .max(25)
+        .matches(/^[a-zA-Z-]+$/, "Must be only string")
+        .required("please enter product name"),
+      product_price: yup.string().required("please enter product price"),
+      product_final_price: yup
+        .string()
+        .required("please enter final product price"),
+    }),
+    onSubmit: (_, action) => {
+      action.resetForm();
+      Updated_product_data();
+      setIsLoading(false);
+    },
+  });
+  const getData = async () => {
+    const response = await fetch(
+      `http://localhost:5000/admin-selected-product/${query}`
+    );
+    let data = await response.json();
+    query && setIsLoading(true);
+    setValues({
+      category_name: data.category_name,
+      product_image: data.product_image,
+      product_name: data.product_name,
+      product_price: data.product_price,
+      product_final_price: data.product_final_price,
+    });
+  };
+  const Updated_product_data = async () => {
+    const data = {
+      category_name: values.category_name,
+      product_image: values.product_image,
+      product_name: values.product_name,
+      product_price: values.product_price,
+      product_final_price: values.product_final_price,
+    };
+    const response = await fetch(
+      `http://localhost:5000/admin-update-product/${query}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
         },
-        validationSchema: yup.object({
-          category_name: yup.string().required("please select the category"),
-          product_image: yup.string().required("please upload your image"),
-          product_name: yup
-            .string()
-            .min(2)
-            .max(25)
-            .matches(/^[a-zA-Z-]+$/, "Must be only string")
-            .required("please enter product name"),
-          product_price: yup.string().required("please enter product price"),
-          product_final_price: yup
-            .string()
-            .required("please enter final product price"),
-        }),
-        onSubmit: (_, action) => {
-          action.resetForm();
-          Updated_product_data();
-          setIsLoading(false);
-        },
-      });
-      async function getData() {
-        const response = await fetch(
-          `http://localhost:5000/admin-selected-product/${query}`
-        );
-        let data = await response.json();
-        query && setIsLoading(true);
-        setValues({
-          category_name: data.category_name,
-          product_image: data.product_image,
-          product_name: data.product_name,
-          product_price: data.product_price,
-          product_final_price: data.product_final_price,
-        });
+        body: JSON.stringify(data),
       }
-      const role_data = JSON.parse(localStorage.getItem("admin"));
-      async function Updated_product_data() {
-        const data = {
-          category_name: values.category_name,
-          product_image: values.product_image,
-          product_name: values.product_name,
-          product_price: values.product_price,
-          product_final_price: values.product_final_price,
-        };
-        const response = await fetch(
-          `http://localhost:5000/admin-update-product/${query}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          }
-        );
-        let result = await response.json();
-        if (result) {
-          console.log(result);
-          navigate("/admin/list-product");
-        }
+    );
+    let result = await response.json();
+    if (result) {
+      console.log(result);
+      navigate("/admin/list-product");
+    }
+  };
+
+  const handleFileUpload = async (e) => {
+    setIsLoading(true);
+    const file = e.target.files[0];
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "cart_items");
+    data.append("cloud_name", "drsh8sn1x");
+
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/drsh8sn1x/image/upload",
+      {
+        method: "POST",
+        body: data,
       }
-    
-      const handleFileUpload = async (e) => {
-        setIsLoading(true);
-        const file = e.target.files[0];
-        const data = new FormData();
-        data.append("file", file);
-        data.append("upload_preset", "cart_items");
-        data.append("cloud_name", "drsh8sn1x");
-    
-        const response = await fetch(
-          "https://api.cloudinary.com/v1_1/drsh8sn1x/image/upload",
-          {
-            method: "POST",
-            body: data,
-          }
-        );
-        const cloudData = await response.json();
-        setFieldValue("product_image", cloudData.url);
-      };
-    
-      async function category_list() {
-        const response = await fetch(
-          "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
-        );
-        let data = await response.json();
-        setCategoryList(data);
-      }
-      useEffect(() => {
-        if (!ignore) {
-          category_list();
-        }
-        return () => {
-          ignore = true;
-        };
-      }, []);
-    
-      let ignore = false;
-      useEffect(() => {
-        if (!ignore) {
-          getData();
-        }
-        return () => {
-          ignore = true;
-        };
-      }, []);
+    );
+    const cloudData = await response.json();
+    setFieldValue("product_image", cloudData.url);
+  };
+
+  const category_list = async () => {
+    const response = await fetch(
+      "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
+    );
+    let data = await response.json();
+    setCategoryList(data);
+  };
+  let ignore = false;
+  useEffect(() => {
+    if (!ignore) {
+      category_list();
+    }
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!ignore) {
+      getData();
+    }
+    return () => {
+      ignore = true;
+    };
+  }, []);
   return (
     <div className="p-8 h-[calc(100vh-64px)] bg-gray-100 overflow-y-auto">
       <div className="flex flex-col gap-7">
@@ -276,7 +274,7 @@ const AdminEditProduct = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AdminEditProduct
+export default AdminEditProduct;

@@ -10,7 +10,7 @@ const StoreAddCategory = () => {
 
   const navigate = useNavigate();
   const role_data = JSON.parse(localStorage.getItem("store"));
-  async function category_data() {
+  const category_data = async () => {
     const data = {
       category_name: values.categoryName,
       role: role_data.role,
@@ -24,23 +24,22 @@ const StoreAddCategory = () => {
     });
     let result = await response.json();
     console.log(result);
-  }
-  const { values, errors, touched, handleChange, handleSubmit } =
-    useFormik({
-      initialValues: {
-        categoryName: "",
-      },
-      validationSchema: yup.object({
-        categoryName: yup
-          .string()
-          .matches(/^[a-zA-Z]+$/, "Must be only string")
-          .required("please enter product name"),
-      }),
-      onSubmit: (_, action) => {
-        action.resetForm();
-        category_data();
-      },
-    });
+  };
+  const { values, errors, touched, handleChange, handleSubmit } = useFormik({
+    initialValues: {
+      categoryName: "",
+    },
+    validationSchema: yup.object({
+      categoryName: yup
+        .string()
+        .matches(/^[a-zA-Z]+$/, "Must be only string")
+        .required("please enter product name"),
+    }),
+    onSubmit: (_, action) => {
+      action.resetForm();
+      category_data();
+    },
+  });
 
   return (
     <div className="p-8 h-[calc(100vh-64px)] overflow-y-auto bg-gray-100">

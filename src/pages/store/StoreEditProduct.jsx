@@ -11,7 +11,7 @@ const StoreEditProduct = () => {
   const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  async function getData() {
+  const getData = async() => {
     const response = await fetch(
       `http://localhost:5000/store-selected-product/${query}`
     );
@@ -25,7 +25,7 @@ const StoreEditProduct = () => {
       product_final_price: data.product_final_price,
     });
   }
-  async function Updated_product_data() {
+  const Updated_product_data = async() => {
     const data = {
       category_name: values.category_name,
       product_image: values.product_image,
@@ -108,7 +108,7 @@ const StoreEditProduct = () => {
     setFieldValue("product_image", cloudData.url);
   };
 
-  async function category_list() {
+  const category_list = async() => {
     const response = await fetch(
       "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
     );

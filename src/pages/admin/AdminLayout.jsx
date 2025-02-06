@@ -13,7 +13,6 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import { useEffect } from "react";
-// import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const AdminLayout = ({ children }) => {

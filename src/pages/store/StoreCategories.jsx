@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const StoreCategories = () => {
   const [categoryList, setCategoryList] = useState();
   const navigate = useNavigate();
-  async function category_list() {
+  const category_list = async() => {
     const response = await fetch("http://localhost:5000/categories");
     let data = await response.json();
     console.log(data);
@@ -20,7 +20,7 @@ const StoreCategories = () => {
       ignore = true;
     };
   }, []);
-  async function handleDeleteCategory(id) {
+  const handleDeleteCategory = async(id) => {
     const response = await fetch(
       `http://localhost:5000/store-delete-category/${id}`,
       {

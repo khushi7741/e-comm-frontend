@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
@@ -7,17 +7,9 @@ const AdminAddCategory = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("id");
-
   const navigate = useNavigate();
-  // async function getData() {
-  //   const response = await fetch(
-  //     `http://localhost:5000/admin-selected-category/${query}`
-  //   );
-  //   let data = await response.json();
-  //   setFieldValue("categoryName", data.category_name);
-  // }
   const role_data = JSON.parse(localStorage.getItem("admin"));
-  async function category_data() {
+  const category_data = async () => {
     const data = {
       category_name: values.categoryName,
       role: role_data.role,
@@ -31,45 +23,22 @@ const AdminAddCategory = () => {
     });
     let result = await response.json();
     console.log(result);
-  }
-  // async function Updated_category_data() {
-  //   const data = {
-  //     category_name: values.categoryName,
-  //   };
-  //   const response = await fetch(
-  //     `http://localhost:5000/admin-update-category/${query}`,
-  //     {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(data),
-  //     }
-  //   );
-  //   let result = await response.json();
-  //   if (result) {
-  //     console.log(result);
-  //     navigate("/admin/categories");
-  //   }
-  // }
-  const { values, setFieldValue, errors, touched, handleChange, handleSubmit } =
-    useFormik({
-      initialValues: {
-        categoryName: "",
-      },
-      validationSchema: yup.object({
-        categoryName: yup
-          .string()
-          .matches(/^[a-zA-Z]+$/, "Must be only string")
-          .required("please enter product name"),
-      }),
-      onSubmit: (_, action) => {
-        action.resetForm();
-        category_data();
-      },
-    });
-  let ignore = false;
-  
+  };
+  const { values, errors, touched, handleChange, handleSubmit } = useFormik({
+    initialValues: {
+      categoryName: "",
+    },
+    validationSchema: yup.object({
+      categoryName: yup
+        .string()
+        .matches(/^[a-zA-Z]+$/, "Must be only string")
+        .required("please enter product name"),
+    }),
+    onSubmit: (_, action) => {
+      action.resetForm();
+      category_data();
+    },
+  });
   return (
     <div className="p-8 h-[calc(100vh-64px)] overflow-y-auto bg-gray-100">
       <div className="flex flex-col gap-7">

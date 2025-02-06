@@ -9,14 +9,14 @@ const AdminEditCategory = () => {
   const query = searchParams.get("id");
 
   const navigate = useNavigate();
-  async function getData() {
+  const getData = async () => {
     const response = await fetch(
       `http://localhost:5000/admin-selected-category/${query}`
     );
     let data = await response.json();
     setFieldValue("categoryName", data.category_name);
-  }
-  async function Updated_category_data() {
+  };
+  const Updated_category_data = async () => {
     const data = {
       category_name: values.categoryName,
     };
@@ -35,7 +35,7 @@ const AdminEditCategory = () => {
       console.log(result);
       navigate("/admin/categories");
     }
-  }
+  };
   const { values, setFieldValue, errors, touched, handleChange, handleSubmit } =
     useFormik({
       initialValues: {

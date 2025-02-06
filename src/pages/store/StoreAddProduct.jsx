@@ -90,13 +90,13 @@ const StoreAddProduct = () => {
     setFieldValue("product_image", cloudData.url);
   };
 
-  async function category_list() {
+  const category_list = async () => {
     const response = await fetch(
       "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
     );
     let data = await response.json();
     setCategoryList(data);
-  }
+  };
   let ignore = false;
   useEffect(() => {
     if (!ignore) {

@@ -9,14 +9,14 @@ const StoreEditCategory = () => {
   const query = searchParams.get("id");
 
   const navigate = useNavigate();
-  async function getData() {
+  const getData = async () => {
     const response = await fetch(
       `http://localhost:5000/store-selected-category/${query}`
     );
     let data = await response.json();
     setFieldValue("categoryName", data.category_name);
-  }
-  async function Updated_category_data() {
+  };
+  const Updated_category_data = async () => {
     const data = {
       category_name: values.categoryName,
     };
@@ -29,13 +29,13 @@ const StoreEditCategory = () => {
         },
         body: JSON.stringify(data),
       }
-    )
+    );
     let result = await response.json();
     if (result) {
       console.log(result);
       navigate("/store/categories");
     }
-  }
+  };
   const { values, setFieldValue, errors, touched, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
@@ -49,7 +49,7 @@ const StoreEditCategory = () => {
       }),
       onSubmit: (_, action) => {
         action.resetForm();
-        Updated_category_data()
+        Updated_category_data();
       },
     });
   let ignore = false;
