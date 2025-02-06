@@ -2,7 +2,7 @@ import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const ListProduct = () => {
+const AdminProducts = () => {
   const navigate = useNavigate();
   const [productData, setProductData] = useState();
   const product_detail = async () => {
@@ -89,7 +89,7 @@ const ListProduct = () => {
                           <button
                             className="flex items-center gap-2 px-4 py-1 text-left capitalize bg-blue-500 rounded-md text-white"
                             onClick={() =>
-                              navigate(`/admin/add-product?id=${v._id}`)
+                              navigate(`/admin/edit-product?id=${v._id}`)
                             }
                           >
                             <IconEdit className="w-6 h-6" />
@@ -116,4 +116,4 @@ const ListProduct = () => {
   );
 };
 
-export default ListProduct;
+export default AdminProducts;

@@ -2,17 +2,14 @@ import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Categories = () => {
+const StoreCategories = () => {
   const [categoryList, setCategoryList] = useState();
   const navigate = useNavigate();
   async function category_list() {
-    const response = await fetch(
-      "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
-    );
+    const response = await fetch("http://localhost:5000/categories");
     let data = await response.json();
     console.log(data);
-
-    setCategoryList(data);
+    setCategoryList(data?.filter((v, i) => v.role === "store"));
   }
   let ignore = false;
   useEffect(() => {
@@ -25,21 +22,18 @@ const Categories = () => {
   }, []);
   async function handleDeleteCategory(id) {
     const response = await fetch(
-      `https://677614da12a55a9a7d0a8150.mockapi.io/api/categories/${id}`,
+      `http://localhost:5000/store-delete-category/${id}`,
       {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
       }
-    )
-      .then((response) => {
-        // console.log(response);
-        return response.json();
-      })
-      .then((p1) => {
-        category_list();
-      });
+    );
+    let result = await response.json();
+    if (result) {
+      category_list();
+    }
   }
   return (
     <div className="p-8 h-[calc(100vh-64px)] overflow-y-auto bg-gray-100 capitalize">
@@ -72,14 +66,14 @@ const Categories = () => {
                       className="border-b border-b-light-gray text-nowrap text-center text-gray-500 *:py-3 *:px-2"
                       key={i}
                     >
-                      <td className="w-24">{v.id}</td>
+                      <td className="w-24">{i + 1}</td>
                       <td className="text-left">{v.category_name}</td>
                       <td className="w-80">
                         <div className="flex justify-center items-center gap-3">
                           <button
                             className="flex items-center gap-2 px-4 py-1 text-left capitalize bg-blue-500 rounded-md text-white"
                             onClick={() =>
-                              navigate(`/store/add-category?id=${v.id}`)
+                              navigate(`/store/edit-category?id=${v._id}`)
                             }
                           >
                             <IconEdit className="w-6 h-6" />
@@ -87,7 +81,7 @@ const Categories = () => {
                           </button>
                           <button
                             className="flex items-center gap-2 px-4 py-1 text-left capitalize bg-red-600 rounded-md text-white"
-                            onClick={() => handleDeleteCategory(v.id)}
+                            onClick={() => handleDeleteCategory(v._id)}
                           >
                             <IconTrash className="w-6 h-6" />
                             <span className="text-lg font-medium">Remove</span>
@@ -106,4 +100,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default StoreCategories;

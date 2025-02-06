@@ -12,17 +12,21 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminSignUp from "./pages/AdminSignUp";
 import StoreLogin from "./pages/StoreLogin";
 import StoreSignUp from "./pages/StoreSignUp";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AddProduct from "./pages/admin/AddProduct";
-import Dashboard from "./pages/admin/Dashboard";
-import ListProduct from "./pages/admin/ListProduct";
 import StoreLayout from "./pages/store/StoreLayout";
-import Categories from "./pages/store/Categories";
-import AddCategory from "./pages/store/AddCategory";
 import StoreAddProduct from "./pages/store/StoreAddProduct";
-import StoreListProduct from "./pages/store/StoreListProduct";
 import AdminCategories from "./pages/admin/AdminCategories";
 import AdminAddCategory from "./pages/admin/AdminAddCategory";
+import AdminEditProduct from "./pages/admin/AdminEditProduct";
+import AdminEditCategory from "./pages/admin/AdminEditCategory";
+import StoreEditCategory from "./pages/store/StoreEditCategory";
+import StoreEditProduct from "./pages/store/StoreEditProduct";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminAddProduct from "./pages/admin/AdminAddProduct";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminProducts from "./pages/admin/AdminProducts";
+import StoreAddCategory from "./pages/store/StoreAddCategory";
+import StoreCategories from "./pages/store/StoreCategories";
+import StoreProducts from "./pages/store/StoreListProduct";
 
 function App() {
   const cld = new Cloudinary({
@@ -44,7 +48,7 @@ function App() {
           path="/store/categories"
           element={
             <StoreLayout>
-              <Categories />
+              <StoreCategories />
             </StoreLayout>
           }
         />
@@ -60,7 +64,15 @@ function App() {
           path="/store/list-product"
           element={
             <StoreLayout>
-              <StoreListProduct />
+              <StoreProducts />
+            </StoreLayout>
+          }
+        />
+        <Route
+          path="/store/edit-product"
+          element={
+            <StoreLayout>
+              <StoreEditProduct />
             </StoreLayout>
           }
         />
@@ -68,48 +80,72 @@ function App() {
           path="/store/add-category"
           element={
             <StoreLayout>
-              <AddCategory />
+              <StoreAddCategory />
+            </StoreLayout>
+          }
+        />
+        <Route
+          path="/store/edit-category"
+          element={
+            <StoreLayout>
+              <StoreEditCategory />
             </StoreLayout>
           }
         />
         <Route
           path="/admin/dashboard"
           element={
-            <AdminDashboard>
-              <Dashboard />
-            </AdminDashboard>
+            <AdminLayout>
+              <AdminDashboard />
+            </AdminLayout>
           }
         />
         <Route
           path="/admin/list-product"
           element={
-            <AdminDashboard>
-              <ListProduct />
-            </AdminDashboard>
+            <AdminLayout>
+              <AdminProducts />
+            </AdminLayout>
           }
         />
         <Route
           path="/admin/add-product"
           element={
-            <AdminDashboard>
-              <AddProduct />
-            </AdminDashboard>
+            <AdminLayout>
+              <AdminAddProduct />
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/edit-product"
+          element={
+            <AdminLayout>
+              <AdminEditProduct />
+            </AdminLayout>
           }
         />
         <Route
           path="/admin/categories"
           element={
-            <AdminDashboard>
+            <AdminLayout>
               <AdminCategories />
-            </AdminDashboard>
+            </AdminLayout>
           }
         />
         <Route
           path="/admin/add-category"
           element={
-            <AdminDashboard>
+            <AdminLayout>
               <AdminAddCategory />
-            </AdminDashboard>
+            </AdminLayout>
+          }
+        />
+        <Route
+          path="/admin/edit-category"
+          element={
+            <AdminLayout>
+              <AdminEditCategory />
+            </AdminLayout>
           }
         />
         <Route path="/product-detail" element={<ProductDetail />} />

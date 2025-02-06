@@ -1,28 +1,21 @@
 import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
-const AdminAddCategory = () => {
+const StoreAddCategory = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("id");
 
   const navigate = useNavigate();
-  // async function getData() {
-  //   const response = await fetch(
-  //     `http://localhost:5000/admin-selected-category/${query}`
-  //   );
-  //   let data = await response.json();
-  //   setFieldValue("categoryName", data.category_name);
-  // }
-  const role_data = JSON.parse(localStorage.getItem("admin"));
+  const role_data = JSON.parse(localStorage.getItem("store"));
   async function category_data() {
     const data = {
       category_name: values.categoryName,
       role: role_data.role,
     };
-    const response = await fetch("http://localhost:5000/admin-add-category", {
+    const response = await fetch("http://localhost:5000/store-add-category", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,27 +25,7 @@ const AdminAddCategory = () => {
     let result = await response.json();
     console.log(result);
   }
-  // async function Updated_category_data() {
-  //   const data = {
-  //     category_name: values.categoryName,
-  //   };
-  //   const response = await fetch(
-  //     `http://localhost:5000/admin-update-category/${query}`,
-  //     {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(data),
-  //     }
-  //   );
-  //   let result = await response.json();
-  //   if (result) {
-  //     console.log(result);
-  //     navigate("/admin/categories");
-  //   }
-  // }
-  const { values, setFieldValue, errors, touched, handleChange, handleSubmit } =
+  const { values, errors, touched, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
         categoryName: "",
@@ -68,12 +41,11 @@ const AdminAddCategory = () => {
         category_data();
       },
     });
-  let ignore = false;
-  
+
   return (
     <div className="p-8 h-[calc(100vh-64px)] overflow-y-auto bg-gray-100">
       <div className="flex flex-col gap-7">
-        <div className="bg-white rounded-lg shadow-lg p-5 flex text-lg font-semibold text-sky-600">
+        <div className="bg-white rounded-lg shadow-lg p-5 flex text-lg font-semibold text-indigo-600">
           <h1 className="capitalize text-2xl">add category</h1>
         </div>
         <div className="bg-white rounded-lg shadow-lg p-5 text-lg font-semibold text-gray-600">
@@ -98,7 +70,7 @@ const AdminAddCategory = () => {
                 <button
                   type="button"
                   className="capitalize bg-sky-600 text-white px-6 py-1 rounded-lg"
-                  onClick={() => navigate("/admin/categories")}
+                  onClick={() => navigate("/store/categories")}
                 >
                   back
                 </button>
@@ -117,4 +89,4 @@ const AdminAddCategory = () => {
   );
 };
 
-export default AdminAddCategory;
+export default StoreAddCategory;

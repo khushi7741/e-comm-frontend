@@ -7,11 +7,9 @@ const AdminCategories = () => {
   const navigate = useNavigate();
   async function category_list() {
     const response = await fetch(
-      "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
+      "http://localhost:5000/categories"
     );
     let data = await response.json();
-    console.log(data);
-
     setCategoryList(data);
   }
   let ignore = false;
@@ -25,7 +23,7 @@ const AdminCategories = () => {
   }, []);
   async function handleDeleteCategory(id) {
     const response = await fetch(
-      `https://677614da12a55a9a7d0a8150.mockapi.io/api/categories/${id}`,
+      `http://localhost:5000/admin-delete-category/${id}`,
       {
         method: "DELETE",
         headers: {
@@ -33,12 +31,10 @@ const AdminCategories = () => {
         },
       }
     )
-      .then((response) => {
-        return response.json();
-      })
-      .then((p1) => {
-        category_list();
-      });
+    let result = await response.json();
+    if (result) {
+     category_list();
+    }
   }
   return (
     <div className="p-8 h-[calc(100vh-64px)] overflow-y-auto bg-gray-100 capitalize">
@@ -71,14 +67,14 @@ const AdminCategories = () => {
                       className="border-b border-b-light-gray text-nowrap text-center text-gray-500 *:py-3 *:px-2"
                       key={i}
                     >
-                      <td className="w-24">{v.id}</td>
+                      <td className="w-24">{i + 1}</td>
                       <td className="text-left">{v.category_name}</td>
                       <td className="w-80">
                         <div className="flex justify-center items-center gap-3">
                           <button
                             className="flex items-center gap-2 px-4 py-1 text-left capitalize bg-blue-500 rounded-md text-white"
                             onClick={() =>
-                              navigate(`/store/add-category?id=${v.id}`)
+                              navigate(`/admin/edit-category?id=${v._id}`)
                             }
                           >
                             <IconEdit className="w-6 h-6" />
@@ -86,7 +82,7 @@ const AdminCategories = () => {
                           </button>
                           <button
                             className="flex items-center gap-2 px-4 py-1 text-left capitalize bg-red-600 rounded-md text-white"
-                            onClick={() => handleDeleteCategory(v.id)}
+                            onClick={() => handleDeleteCategory(v._id)}
                           >
                             <IconTrash className="w-6 h-6" />
                             <span className="text-lg font-medium">Remove</span>

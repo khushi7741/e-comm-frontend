@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
-const StoreAddProduct = () => {
+const StoreEditProduct = () => {
   const inputRef = useRef(null);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -11,26 +11,44 @@ const StoreAddProduct = () => {
   const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState();
   const [isLoading, setIsLoading] = useState(false);
-  const role_data = JSON.parse(localStorage.getItem("store"));
-  const product_data = async () => {
+  async function getData() {
+    const response = await fetch(
+      `http://localhost:5000/store-selected-product/${query}`
+    );
+    let data = await response.json();
+    query && setIsLoading(true);
+    setValues({
+      category_name: data.category_name,
+      product_image: data.product_image,
+      product_name: data.product_name,
+      product_price: data.product_price,
+      product_final_price: data.product_final_price,
+    });
+  }
+  async function Updated_product_data() {
     const data = {
       category_name: values.category_name,
       product_image: values.product_image,
       product_name: values.product_name,
       product_price: values.product_price,
       product_final_price: values.product_final_price,
-      role: role_data.role,
     };
-    const response = await fetch("http://localhost:5000/store-add-product", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `http://localhost:5000/store-update-product/${query}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
     let result = await response.json();
-    console.log(result);
-  };
+    if (result) {
+      console.log(result);
+      navigate("/store/list-product");
+    }
+  }
   const {
     values,
     setFieldValue,
@@ -63,7 +81,7 @@ const StoreAddProduct = () => {
     }),
     onSubmit: (_, action) => {
       action.resetForm();
-      product_data();
+      Updated_product_data();
       setIsLoading(false);
     },
   });
@@ -97,7 +115,6 @@ const StoreAddProduct = () => {
     let data = await response.json();
     setCategoryList(data);
   }
-  let ignore = false;
   useEffect(() => {
     if (!ignore) {
       category_list();
@@ -107,11 +124,20 @@ const StoreAddProduct = () => {
     };
   }, []);
 
+  let ignore = false;
+  useEffect(() => {
+    if (!ignore) {
+      getData();
+    }
+    return () => {
+      ignore = true;
+    };
+  }, []);
   return (
     <div className="p-8 h-[calc(100vh-64px)] bg-gray-100 overflow-y-auto">
       <div className="flex flex-col gap-7">
         <div className="bg-white rounded-lg shadow-lg p-5 flex text-lg font-semibold text-indigo-600">
-          <h1 className="capitalize text-2xl">add product</h1>
+          <h1 className="capitalize text-2xl">edit product</h1>
         </div>
         <div className="bg-white rounded-lg shadow-lg p-10 overflow-y-auto">
           <div className="flex items-center w-full h-full">
@@ -254,4 +280,4 @@ const StoreAddProduct = () => {
   );
 };
 
-export default StoreAddProduct;
+export default StoreEditProduct;
