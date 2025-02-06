@@ -13,7 +13,7 @@ const Product = (props) => {
   ];
   const navigate = useNavigate();
   const [productDetail, setProductDetail] = useState([]);
-  async function product_detail() {
+  const product_detail = async() => {
     let copyData = productDetail;
     const response = await fetch(
       "http://localhost:5000/products"
