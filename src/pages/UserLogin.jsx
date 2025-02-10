@@ -25,27 +25,27 @@ const UserLogin = () => {
   const collectData = async (e) => {
     try {
       let { email, password } = values;
-    let data = {
-      email: email,
-      password: password,
-    };
-    let result = await fetch("http://localhost:5000/user-login", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    result = await result.json();
-    console.log(result);
-    if (result.auth) {
-      e.resetForm();
-      localStorage.setItem("user", JSON.stringify(result.user));
-      localStorage.setItem("token", JSON.stringify(result.auth));
-      navigate("/cart-app");
-    } else {
-      alert("please enter correct details");
-    }
+      let data = {
+        email: email,
+        password: password,
+      };
+      let result = await fetch("http://localhost:5000/user-login", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      result = await result.json();
+      console.log(result);
+      if (result.auth && result.user.role === "user") {
+        e.resetForm();
+        localStorage.setItem("user", JSON.stringify(result.user));
+        localStorage.setItem("user-token", JSON.stringify(result.auth));
+        navigate("/cart-app");
+      } else {
+        alert("please enter correct details");
+      }
     } catch (error) {
       console.log(error);
     }

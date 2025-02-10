@@ -13,21 +13,22 @@ const Product = (props) => {
   ];
   const navigate = useNavigate();
   const [productDetail, setProductDetail] = useState([]);
-  const product_detail = async() => {
+  const product_detail = async () => {
     try {
       let copyData = productDetail;
-    const response = await fetch(
-      "http://localhost:5000/products"
-      
-    );
-    let data = await response.json();
-    copyData = data;
-    copyData = copyData.sort(() => Math.random() - Math.random()).slice(0, 5);
-    setProductDetail(copyData);
+      const response = await fetch("http://localhost:5000/products", {
+        headers: {
+          authorization: `bearer ${JSON.parse(localStorage.getItem("user-token"))}`,
+        },
+      });
+      let data = await response.json();
+      copyData = data;
+      copyData = copyData.sort(() => Math.random() - Math.random()).slice(0, 5);
+      setProductDetail(copyData);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   let ignore = false;
   useEffect(() => {
     if (!ignore) {
@@ -55,12 +56,7 @@ const Product = (props) => {
               </div>
               <div className="flex w-4/5 h-24">
                 {imgArr.map((val, i) => (
-                  <img
-                    src={val}
-                    alt="slider"
-                    className="h-24 w-1/5"
-                    key={i}
-                  />
+                  <img src={val} alt="slider" className="h-24 w-1/5" key={i} />
                 ))}
               </div>
             </div>

@@ -54,7 +54,7 @@ const StoreSignUp = () => {
     result = await result.json();
     console.log(result);
     localStorage.setItem("store", JSON.stringify(result.result));
-    localStorage.setItem("token", JSON.stringify(result.auth));
+    localStorage.setItem("store-token", JSON.stringify(result.auth));
     navigate("/store-login");
     } catch (error) {
       console.log(error);

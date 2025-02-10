@@ -1,15 +1,24 @@
 import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AdminProducts = () => {
+  const location = useLocation();
+  if (location.pathname.startsWith("/admin")) {
+    localStorage.removeItem("store-token");
+    localStorage.removeItem("store");
+    localStorage.removeItem("user");
+    localStorage.removeItem("user-token");
+  }
   const navigate = useNavigate();
   const [productData, setProductData] = useState();
   const product_detail = async () => {
     try {
       const response = await fetch("http://localhost:5000/products", {
         headers: {
-          authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          authorization: `bearer ${JSON.parse(
+            localStorage.getItem("admin-token")
+          )}`,
         },
       });
       let data = await response.json();
@@ -39,7 +48,7 @@ const AdminProducts = () => {
           headers: {
             "Content-Type": "application/json",
             authorization: `bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("admin-token")
             )}`,
           },
         }

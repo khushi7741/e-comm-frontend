@@ -1,15 +1,22 @@
 import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AdminCategories = () => {
+  const location = useLocation();
+  if (location.pathname.startsWith("/admin")) {
+    localStorage.removeItem("store-token");
+    localStorage.removeItem("store");
+    localStorage.removeItem("user");
+    localStorage.removeItem("user-token");
+  }
   const [categoryList, setCategoryList] = useState();
   const navigate = useNavigate();
   const category_list = async () => {
     try {
       const response = await fetch("http://localhost:5000/categories", {
         headers: {
-          authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          authorization: `bearer ${JSON.parse(localStorage.getItem("admin-token"))}`,
         },
       });
       let data = await response.json();
@@ -36,7 +43,7 @@ const AdminCategories = () => {
           headers: {
             "Content-Type": "application/json",
             authorization: `bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("admin-token")
             )}`,
           },
         }

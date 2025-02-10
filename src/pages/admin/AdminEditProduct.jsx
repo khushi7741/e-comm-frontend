@@ -6,6 +6,12 @@ import * as yup from "yup";
 const AdminEditProduct = () => {
   const inputRef = useRef(null);
   const location = useLocation();
+    if (location.pathname.startsWith("/admin")) {
+      localStorage.removeItem("store-token");
+      localStorage.removeItem("store");
+      localStorage.removeItem("user");
+      localStorage.removeItem("user-token");
+    }
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("id");
   const navigate = useNavigate();
@@ -54,7 +60,7 @@ const AdminEditProduct = () => {
         {
           headers: {
             authorization: `bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("admin-token")
             )}`,
           },
         }
@@ -88,7 +94,7 @@ const AdminEditProduct = () => {
           headers: {
             "Content-Type": "application/json",
             authorization: `bearer ${JSON.parse(
-              localStorage.getItem("token")
+              localStorage.getItem("admin-token")
             )}`,
           },
           body: JSON.stringify(data),
@@ -130,7 +136,11 @@ const AdminEditProduct = () => {
   const category_list = async () => {
     try {
       const response = await fetch(
-        "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
+        "http://localhost:5000/categories", {
+          headers: {
+            authorization: `bearer ${JSON.parse(localStorage.getItem("admin-token"))}`,
+          },
+        }
       );
       let data = await response.json();
       setCategoryList(data);

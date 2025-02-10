@@ -5,6 +5,12 @@ import * as yup from "yup";
 
 const AdminAddCategory = () => {
   const location = useLocation();
+    if (location.pathname.startsWith("/admin")) {
+      localStorage.removeItem("store-token");
+      localStorage.removeItem("store");
+      localStorage.removeItem("user");
+      localStorage.removeItem("user-token");
+    }
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("id");
   const navigate = useNavigate();
@@ -19,7 +25,7 @@ const AdminAddCategory = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          authorization: `bearer ${JSON.parse(localStorage.getItem("admin-token"))}`,
         },
         body: JSON.stringify(data),
       });

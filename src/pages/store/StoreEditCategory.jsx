@@ -5,6 +5,12 @@ import * as yup from "yup";
 
 const StoreEditCategory = () => {
   const location = useLocation();
+      if (location.pathname.startsWith("/store")) {
+        localStorage.removeItem("admin-token");
+        localStorage.removeItem("admin");
+        localStorage.removeItem("user");
+        localStorage.removeItem("user-token");
+      }
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("id");
 
@@ -14,7 +20,7 @@ const StoreEditCategory = () => {
       const response = await fetch(
         `http://localhost:5000/store-selected-category/${query}`, {
           headers: {
-            authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+            authorization: `bearer ${JSON.parse(localStorage.getItem("store-token"))}`,
           },
         }
       );
@@ -35,7 +41,7 @@ const StoreEditCategory = () => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+            authorization: `bearer ${JSON.parse(localStorage.getItem("store-token"))}`,
           },
           body: JSON.stringify(data),
         }

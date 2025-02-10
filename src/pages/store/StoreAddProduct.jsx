@@ -6,6 +6,12 @@ import * as yup from "yup";
 const StoreAddProduct = () => {
   const inputRef = useRef(null);
   const location = useLocation();
+      if (location.pathname.startsWith("/store")) {
+        localStorage.removeItem("admin-token");
+        localStorage.removeItem("admin");
+        localStorage.removeItem("user");
+        localStorage.removeItem("user-token");
+      }
   const searchParams = new URLSearchParams(location.search);
   const query = searchParams.get("id");
   const navigate = useNavigate();
@@ -26,7 +32,7 @@ const StoreAddProduct = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          authorization: `bearer ${JSON.parse(localStorage.getItem("store-token"))}`,
         },
         body: JSON.stringify(data),
       });
@@ -95,7 +101,11 @@ const StoreAddProduct = () => {
   const category_list = async () => {
     try {
       const response = await fetch(
-        "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
+        "http://localhost:5000/categories", {
+          headers: {
+            authorization: `bearer ${JSON.parse(localStorage.getItem("store-token"))}`,
+          },
+        }
       );
       let data = await response.json();
       setCategoryList(data);

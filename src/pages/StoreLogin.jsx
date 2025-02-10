@@ -40,10 +40,10 @@ const StoreLogin = () => {
     });
     result = await result.json();
     console.log(result);
-    if (result.auth) {
+    if (result.auth && result.user.role === "store") {
       e.resetForm();
       localStorage.setItem("store", JSON.stringify(result.user));
-      localStorage.setItem("token", JSON.stringify(result.auth));
+      localStorage.setItem("store-token", JSON.stringify(result.auth));
       navigate("/store/categories");
     } else {
       alert("please enter correct details");

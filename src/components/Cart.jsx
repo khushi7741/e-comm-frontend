@@ -9,7 +9,11 @@ const Cart = (props) => {
   const debouncedValue = UseDebounce(isScroll, 2000);
   const search = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:5000/products");
+      const response = await fetch("http://localhost:5000/products", {
+        headers: {
+          authorization: `bearer ${JSON.parse(localStorage.getItem("user-token"))}`,
+        },
+      });
       let data = await response.json();
       setProductDetail(data);
     } catch (error) {
