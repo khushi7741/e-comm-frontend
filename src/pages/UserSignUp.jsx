@@ -38,7 +38,8 @@ const UserSignUp = () => {
   });
 
   const collectData = async () => {
-    let { userName, email, password, confirmPassword } = values;
+    try {
+      let { userName, email, password, confirmPassword } = values;
     let data = {
       userName: userName,
       email: email,
@@ -55,8 +56,12 @@ const UserSignUp = () => {
     });
     result = await result.json();
     console.log(result);
-    localStorage.setItem("user", JSON.stringify(result));
+    localStorage.setItem("user", JSON.stringify(result.result));
+    localStorage.setItem("token", JSON.stringify(result.auth));
     navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="h-screen w-full">

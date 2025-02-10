@@ -10,30 +10,48 @@ const AdminEditCategory = () => {
 
   const navigate = useNavigate();
   const getData = async () => {
-    const response = await fetch(
-      `http://localhost:5000/admin-selected-category/${query}`
-    );
-    let data = await response.json();
-    setFieldValue("categoryName", data.category_name);
+    try {
+      const response = await fetch(
+        `http://localhost:5000/admin-selected-category/${query}`,
+        {
+          headers: {
+            authorization: `bearer ${JSON.parse(
+              localStorage.getItem("token")
+            )}`,
+          },
+        }
+      );
+      let data = await response.json();
+      setFieldValue("categoryName", data.category_name);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const Updated_category_data = async () => {
-    const data = {
-      category_name: values.categoryName,
-    };
-    const response = await fetch(
-      `http://localhost:5000/admin-update-category/${query}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+    try {
+      const data = {
+        category_name: values.categoryName,
+      };
+      const response = await fetch(
+        `http://localhost:5000/admin-update-category/${query}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `bearer ${JSON.parse(
+              localStorage.getItem("token")
+            )}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      let result = await response.json();
+      if (result) {
+        console.log(result);
+        navigate("/admin/categories");
       }
-    );
-    let result = await response.json();
-    if (result) {
-      console.log(result);
-      navigate("/admin/categories");
+    } catch (error) {
+      console.log(error);
     }
   };
   const { values, setFieldValue, errors, touched, handleChange, handleSubmit } =

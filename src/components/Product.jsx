@@ -14,7 +14,8 @@ const Product = (props) => {
   const navigate = useNavigate();
   const [productDetail, setProductDetail] = useState([]);
   const product_detail = async() => {
-    let copyData = productDetail;
+    try {
+      let copyData = productDetail;
     const response = await fetch(
       "http://localhost:5000/products"
       
@@ -23,6 +24,9 @@ const Product = (props) => {
     copyData = data;
     copyData = copyData.sort(() => Math.random() - Math.random()).slice(0, 5);
     setProductDetail(copyData);
+    } catch (error) {
+      console.log(error);
+    }
   }
   let ignore = false;
   useEffect(() => {

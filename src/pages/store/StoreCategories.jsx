@@ -6,10 +6,18 @@ const StoreCategories = () => {
   const [categoryList, setCategoryList] = useState();
   const navigate = useNavigate();
   const category_list = async() => {
-    const response = await fetch("http://localhost:5000/categories");
-    let data = await response.json();
-    console.log(data);
-    setCategoryList(data?.filter((v, i) => v.role === "store"));
+    try {
+      const response = await fetch("http://localhost:5000/categories", {
+        headers: {
+          authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      });
+      let data = await response.json();
+      console.log(data);
+      setCategoryList(data?.filter((v, i) => v.role === "store"));
+    } catch (error) {
+      console.log(error);
+    }
   }
   let ignore = false;
   useEffect(() => {
@@ -21,18 +29,23 @@ const StoreCategories = () => {
     };
   }, []);
   const handleDeleteCategory = async(id) => {
-    const response = await fetch(
-      `http://localhost:5000/store-delete-category/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    try {
+      const response = await fetch(
+        `http://localhost:5000/store-delete-category/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          },
+        }
+      );
+      let result = await response.json();
+      if (result) {
+        category_list();
       }
-    );
-    let result = await response.json();
-    if (result) {
-      category_list();
+    } catch (error) {
+      console.log(error);
     }
   }
   return (

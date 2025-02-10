@@ -6,9 +6,17 @@ const StoreProducts = () => {
   const navigate = useNavigate();
   const [productData, setProductData] = useState();
   const product_detail = async () => {
-    const response = await fetch("http://localhost:5000/products");
-    let data = await response.json();
-    setProductData(data?.filter((v, i) => v.role === "store"));
+    try {
+      const response = await fetch("http://localhost:5000/products", {
+        headers: {
+          authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      });
+      let data = await response.json();
+      setProductData(data?.filter((v, i) => v.role === "store"));
+    } catch (error) {
+      console.log(error);
+    }
   };
   let ignore = false;
   useEffect(() => {
@@ -23,18 +31,23 @@ const StoreProducts = () => {
     console.log(productData);
   }, [productData]);
   const handleDeleteProduct = async (id) => {
-    const response = await fetch(
-      `http://localhost:5000/admin-delete-product/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    try {
+      const response = await fetch(
+        `http://localhost:5000/admin-delete-product/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          },
+        }
+      );
+      let result = await response.json();
+      if (result) {
+        product_detail();
       }
-    );
-    let result = await response.json();
-    if (result) {
-      product_detail();
+    } catch (error) {
+      console.log(error);
     }
   };
   return (

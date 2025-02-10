@@ -23,7 +23,8 @@ const UserLogin = () => {
     },
   });
   const collectData = async (e) => {
-    let { email, password } = values;
+    try {
+      let { email, password } = values;
     let data = {
       email: email,
       password: password,
@@ -37,12 +38,16 @@ const UserLogin = () => {
     });
     result = await result.json();
     console.log(result);
-    if (result.role === "user") {
+    if (result.auth) {
       e.resetForm();
-      localStorage.setItem("user", JSON.stringify(result));
+      localStorage.setItem("user", JSON.stringify(result.user));
+      localStorage.setItem("token", JSON.stringify(result.auth));
       navigate("/cart-app");
     } else {
       alert("please enter correct details");
+    }
+    } catch (error) {
+      console.log(error);
     }
   };
 

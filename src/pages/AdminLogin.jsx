@@ -20,7 +20,8 @@ const AdminLogin = () => {
     },
   });
   const collectData = async (e) => {
-    let { email, password } = values;
+    try {
+      let { email, password } = values;
     let data = {
       email: email,
       password: password,
@@ -34,12 +35,16 @@ const AdminLogin = () => {
     });
     result = await result.json();
     console.log(result);
-    if (result.role === "admin") {
+    if (result.auth) {
       e.resetForm();
-      localStorage.setItem("admin", JSON.stringify(result));
+      localStorage.setItem("admin", JSON.stringify(result.user));
+      localStorage.setItem("token", JSON.stringify(result.auth));
       navigate("/admin/dashboard");
     } else {
       alert("please enter correct details");
+    }
+    } catch (error) {
+      console.log(error);
     }
   };
 

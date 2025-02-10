@@ -8,11 +8,13 @@ const Cart = (props) => {
   const [isScroll, setIsScroll] = useState(false);
   const debouncedValue = UseDebounce(isScroll, 2000);
   const search = useCallback(async () => {
-    const response = await fetch(
-      "http://localhost:5000/products"
-    );
-    let data = await response.json();
-    setProductDetail(data);
+    try {
+      const response = await fetch("http://localhost:5000/products");
+      let data = await response.json();
+      setProductDetail(data);
+    } catch (error) {
+      console.log(error);
+    }
   }, [debouncedValue]);
 
   useEffect(() => {
@@ -66,7 +68,7 @@ const Cart = (props) => {
                         });
                       }}
                     >
-                      add to cart 
+                      add to cart
                     </button>
                     <button
                       className="capitalize bg-sky-300 px-3 py-1 rounded-lg text-blue-800"

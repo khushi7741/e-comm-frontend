@@ -42,49 +42,62 @@ const AdminAddProduct = () => {
     });
   const role_data = JSON.parse(localStorage.getItem("admin"));
   const product_data = async () => {
-    const data = {
-      category_name: values.category_name,
-      product_image: values.product_image,
-      product_name: values.product_name,
-      product_price: values.product_price,
-      product_final_price: values.product_final_price,
-      role: role_data.role,
-    };
-    const response = await fetch("http://localhost:5000/admin-add-product", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    let result = await response.json();
-    console.log(result);
+    try {
+      const data = {
+        category_name: values.category_name,
+        product_image: values.product_image,
+        product_name: values.product_name,
+        product_price: values.product_price,
+        product_final_price: values.product_final_price,
+        role: role_data.role,
+      };
+      const response = await fetch("http://localhost:5000/admin-add-product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+        body: JSON.stringify(data),
+      });
+      let result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handleFileUpload = async (e) => {
-    setIsLoading(true);
-    const file = e.target.files[0];
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", "cart_items");
-    data.append("cloud_name", "drsh8sn1x");
+    try {
+      setIsLoading(true);
+      const file = e.target.files[0];
+      const data = new FormData();
+      data.append("file", file);
+      data.append("upload_preset", "cart_items");
+      data.append("cloud_name", "drsh8sn1x");
 
-    const response = await fetch(
-      "https://api.cloudinary.com/v1_1/drsh8sn1x/image/upload",
-      {
-        method: "POST",
-        body: data,
-      }
-    );
-    const cloudData = await response.json();
-    setFieldValue("product_image", cloudData.url);
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/drsh8sn1x/image/upload",
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+      const cloudData = await response.json();
+      setFieldValue("product_image", cloudData.url);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const category_list = async () => {
-    const response = await fetch(
-      "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
-    );
-    let data = await response.json();
-    setCategoryList(data);
+    try {
+      const response = await fetch(
+        "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
+      );
+      let data = await response.json();
+      setCategoryList(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   let ignore = false;
   useEffect(() => {

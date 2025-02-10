@@ -25,7 +25,8 @@ const StoreLogin = () => {
     },
   });
   const collectData = async (e) => {
-    let { email, password } = values;
+    try {
+      let { email, password } = values;
     let data = {
       email: email,
       password: password,
@@ -39,12 +40,16 @@ const StoreLogin = () => {
     });
     result = await result.json();
     console.log(result);
-    if (result.role === "store") {
+    if (result.auth) {
       e.resetForm();
-      localStorage.setItem("store", JSON.stringify(result));
+      localStorage.setItem("store", JSON.stringify(result.user));
+      localStorage.setItem("token", JSON.stringify(result.auth));
       navigate("/store/categories");
     } else {
       alert("please enter correct details");
+    }
+    } catch (error) {
+      console.log(error);
     }
   };
   return (

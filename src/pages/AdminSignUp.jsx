@@ -36,6 +36,7 @@ const AdminSignUp = () => {
     },
   });
   const collectData = async () => {
+   try {
     let { userName, email, password, confirmPassword } = values;
     let data = {
       userName: userName,
@@ -53,8 +54,12 @@ const AdminSignUp = () => {
     });
     result = await result.json();
     console.log(result);
-    localStorage.setItem("admin", JSON.stringify(result));
+    localStorage.setItem("admin", JSON.stringify(result.result));
+    localStorage.setItem("token", JSON.stringify(result.auth));
     navigate("/admin-login");
+   } catch (error) {
+    console.log(error);
+   }
   };
   return (
     <div className="h-screen w-full">

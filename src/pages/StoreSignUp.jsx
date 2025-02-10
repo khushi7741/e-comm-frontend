@@ -35,7 +35,8 @@ const StoreSignUp = () => {
     },
   });
   const collectData = async () => {
-    let { userName, email, password, confirmPassword } = values;
+    try {
+      let { userName, email, password, confirmPassword } = values;
     let data = {
       userName: userName,
       email: email,
@@ -52,8 +53,12 @@ const StoreSignUp = () => {
     });
     result = await result.json();
     console.log(result);
-    localStorage.setItem("store", JSON.stringify(result));
+    localStorage.setItem("store", JSON.stringify(result.result));
+    localStorage.setItem("token", JSON.stringify(result.auth));
     navigate("/store-login");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="h-screen w-full">

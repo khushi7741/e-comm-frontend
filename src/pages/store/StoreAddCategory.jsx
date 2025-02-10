@@ -11,19 +11,24 @@ const StoreAddCategory = () => {
   const navigate = useNavigate();
   const role_data = JSON.parse(localStorage.getItem("store"));
   const category_data = async () => {
-    const data = {
-      category_name: values.categoryName,
-      role: role_data.role,
-    };
-    const response = await fetch("http://localhost:5000/store-add-category", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    let result = await response.json();
-    console.log(result);
+    try {
+      const data = {
+        category_name: values.categoryName,
+        role: role_data.role,
+      };
+      const response = await fetch("http://localhost:5000/store-add-category", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+        body: JSON.stringify(data),
+      });
+      let result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const { values, errors, touched, handleChange, handleSubmit } = useFormik({
     initialValues: {

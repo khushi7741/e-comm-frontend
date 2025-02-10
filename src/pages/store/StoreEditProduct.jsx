@@ -12,41 +12,54 @@ const StoreEditProduct = () => {
   const [categoryList, setCategoryList] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const getData = async() => {
-    const response = await fetch(
-      `http://localhost:5000/store-selected-product/${query}`
-    );
-    let data = await response.json();
-    query && setIsLoading(true);
-    setValues({
-      category_name: data.category_name,
-      product_image: data.product_image,
-      product_name: data.product_name,
-      product_price: data.product_price,
-      product_final_price: data.product_final_price,
-    });
+    try {
+      const response = await fetch(
+        `http://localhost:5000/store-selected-product/${query}`, {
+          headers: {
+            authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          },
+        }
+      );
+      let data = await response.json();
+      query && setIsLoading(true);
+      setValues({
+        category_name: data.category_name,
+        product_image: data.product_image,
+        product_name: data.product_name,
+        product_price: data.product_price,
+        product_final_price: data.product_final_price,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
   const Updated_product_data = async() => {
-    const data = {
-      category_name: values.category_name,
-      product_image: values.product_image,
-      product_name: values.product_name,
-      product_price: values.product_price,
-      product_final_price: values.product_final_price,
-    };
-    const response = await fetch(
-      `http://localhost:5000/store-update-product/${query}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+    try {
+      const data = {
+        category_name: values.category_name,
+        product_image: values.product_image,
+        product_name: values.product_name,
+        product_price: values.product_price,
+        product_final_price: values.product_final_price,
+      };
+      const response = await fetch(
+        `http://localhost:5000/store-update-product/${query}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      let result = await response.json();
+      if (result) {
+        console.log(result);
+        navigate("/store/list-product");
       }
-    );
-    let result = await response.json();
-    if (result) {
-      console.log(result);
-      navigate("/store/list-product");
+    } catch (error) {
+      console.log(error);
     }
   }
   const {
@@ -90,7 +103,8 @@ const StoreEditProduct = () => {
   }, [errors]);
 
   const handleFileUpload = async (e) => {
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
     const file = e.target.files[0];
     const data = new FormData();
     data.append("file", file);
@@ -106,14 +120,21 @@ const StoreEditProduct = () => {
     );
     const cloudData = await response.json();
     setFieldValue("product_image", cloudData.url);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const category_list = async() => {
-    const response = await fetch(
-      "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
-    );
-    let data = await response.json();
-    setCategoryList(data);
+    try {
+      const response = await fetch(
+        "https://677614da12a55a9a7d0a8150.mockapi.io/api/categories"
+      );
+      let data = await response.json();
+      setCategoryList(data);
+    } catch (error) {
+      console.log(error);
+    }
   }
   useEffect(() => {
     if (!ignore) {

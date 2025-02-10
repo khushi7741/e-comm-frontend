@@ -6,9 +6,17 @@ const AdminCategories = () => {
   const [categoryList, setCategoryList] = useState();
   const navigate = useNavigate();
   const category_list = async () => {
-    const response = await fetch("http://localhost:5000/categories");
-    let data = await response.json();
-    setCategoryList(data);
+    try {
+      const response = await fetch("http://localhost:5000/categories", {
+        headers: {
+          authorization: `bearer ${JSON.parse(localStorage.getItem("token"))}`,
+        },
+      });
+      let data = await response.json();
+      setCategoryList(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   let ignore = false;
   useEffect(() => {
@@ -20,18 +28,25 @@ const AdminCategories = () => {
     };
   }, []);
   const handleDeleteCategory = async (id) => {
-    const response = await fetch(
-      `http://localhost:5000/admin-delete-category/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    try {
+      const response = await fetch(
+        `http://localhost:5000/admin-delete-category/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `bearer ${JSON.parse(
+              localStorage.getItem("token")
+            )}`,
+          },
+        }
+      );
+      let result = await response.json();
+      if (result) {
+        category_list();
       }
-    );
-    let result = await response.json();
-    if (result) {
-      category_list();
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
